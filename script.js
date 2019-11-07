@@ -4,35 +4,55 @@ penPromise.then(
 function(data)
     {
         getQuiz(data);
-        getL(data);
+        //getL(data);
         ev(data);
-        console.log("works",data);
+        getDay(data);
+        console.log("Penguins",data);
     },
 function(err)
     {
         console.log("ERROR",err);
     })
 
-var screen = {width:500, height:500}
-
 var getGrade = function(quiz)
 {
     return quiz.grade;
 }
 
-var getQuiz = function(data)
+var getQuiz = function(penguin)
 {
-    return data[0].quizes.map(getGrade); //need for all penguins, not just one
+    return penguin[0].quizes.map(getGrade); //need for all penguins, not just one
 }
 
-var getL = function(data)
+/*var getL = function(data)
 {
+    console.log(getQuiz(data).length)
     return getQuiz(data).length;
+} */
+
+var getDay = function(data)
+{
+    console.log("Days", data[0].quizes.map(days))
+    return data[0].quizes.map(days);
+}
+
+var days = function(penguin)
+{
+    return penguin.day;
+}
+
+var startDay = 1;
+
+var trackDay = function(change)
+{
+    day = startDay + change;
+    startDay = day;
+    return day;
 }
 
 var ev = function(data)
 {
-    var xs = d3.range(getL(data))
+    var xs = getDay(data) //d3.range(getDay(data))
 
     console.log("x",xs);
 
@@ -42,10 +62,19 @@ var ev = function(data)
             return {x:x, y:x}
         })
     
-    console.log(points);
+    console.log("Points", points);
     
+    var dayCounter = d3.select("body")
+        .append("p")
+        .attr("id","counter")
+        .text("Day " + trackDay(0))
+        
     var setup = function(points)
     {
+        var screen = {width:500, height:500}
+        
+        console.log(screen.width)
+        
         d3.select("svg")
         .attr("width",screen.width)
         .attr("height",screen.height)
@@ -55,6 +84,8 @@ var ev = function(data)
         var yscale = d3.scaleLinear()
             yscale.domain([d3.min(points,function(p){return p.y}),d3.max(points,function(p){return p.y})])
             yscale.range([screen.height,0])
+        console.log({"xscale": xscale, "yscale":yscale})
+        return {"xscale": xscale, "yscale":yscale}
     }
     
     var drawGraph = function(points,xScale,yScale)
@@ -69,4 +100,24 @@ var ev = function(data)
         .attr("r", 2)
     }
     
+    var prevButton = d3.select("#prev")
+        .on("click", function(d)
+            {
+                d3.select("#counter")
+                    .text("Day " + trackDay(-1))
+            })
+    
+    var nextButton = d3.select("#next")
+        .on("click", function(d)
+            {
+                d3.select("#counter")
+                    .text("Day " + trackDay(1))
+            })
+    
+    //drawsGraph
+    setup(points);
+    var xScale = setup(points).xscale;
+    var yScale = setup(points).yscale;
+    drawGraph(points,xScale,yScale);
+
 }
