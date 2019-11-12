@@ -4,7 +4,8 @@ svg
     display: block;
     margin: auto;
     border-style: solid;
-    padding: 10px;
+    //padding: 10px;
+    background-color: aliceblue;
 }
 
 #prev
@@ -21,8 +22,30 @@ svg
     margin-right: 40%;
 }
 
-p
+#prev,#next
+{
+    font-size: 15px;
+}
+
+p,h1
 {
     clear: both;
     text-align: center;
+    padding-top: 10px;
+}
+
+p
+{
+    font-size: 30px;
+}
+
+body
+{
+    background-color: antiquewhite;
+}
+
+#pen, #quiz
+{
+    font-size: 20px;
+    padding-top: 0px;
 }
